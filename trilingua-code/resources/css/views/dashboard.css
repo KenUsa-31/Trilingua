@@ -1,0 +1,26 @@
+/* Dashboard view-specific stylesheet */
+
+/* Dashboard helpers */
+.stack > * + *{margin-top:24px}
+
+/* Statistics cards grid */
+.cards-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.stat-card{background:var(--card-bg);border-radius:12px;padding:24px;box-shadow:0 8px 20px rgba(15,23,42,0.04)}
+
+/* Table card */
+.table-card{background:var(--card-bg);border-radius:12px;padding:24px;box-shadow:0 8px 20px rgba(15,23,42,0.04)}
+.card-title{font-size:1rem;font-weight:600;color:var(--text)}
+
+/* Table styles */
+.table{width:100%;border-collapse:collapse}
+.table th,.table td{padding:10px 8px;border-bottom:1px solid var(--border);text-align:left}
+.table tr.border-top td{border-top:1px solid var(--border)}
+
+/* Status indicators */
+.text-success{color:#16a34a}
+.text-warning{color:#d97706}
+
+/* Responsive */
+@media(max-width:768px){
+    .cards-grid{grid-template-columns:1fr}
+}
