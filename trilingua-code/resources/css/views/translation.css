@@ -1,225 +1,271 @@
-/* Translation view-specific stylesheet */
-/* Uses only CSS custom properties defined in base.css */
+/* Translation page — redesigned */
 
-/* ---- Layout ---- */
-.translation-layout {
+/* ── Page wrapper ───────────────────────────────────────────────────────── */
+.translation-page {
     display: flex;
-    gap: 24px;
-    align-items: flex-start;
+    flex-direction: column;
+    gap: 0;
+    height: calc(100vh - 120px);
+    min-height: 500px;
 }
 
-/* ---- Panel ---- */
-.translation-panel {
-    flex: 1;
-    min-width: 280px;
-    background: var(--card-bg);
-    border-radius: var(--radius);
-    padding: 0;
-    overflow: hidden;
-    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.04);
-}
-
-/* ---- Panel Header ---- */
-.translation-panel__header {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 8px;
-    padding: 12px 16px;
-    border-bottom: 1px solid var(--border);
-}
-
-.translation-panel__header select {
-    flex: 1;
-    padding: 8px 10px;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    background: var(--bg);
-    color: var(--text);
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: border-color 0.15s;
-    box-sizing: border-box;
-}
-
-.translation-panel__header select:focus {
-    outline: none;
-    border-color: var(--muted);
-}
-
-/* ---- Swap Button ---- */
-.translation-swap {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 6px;
-    border-radius: 6px;
-    color: var(--muted);
+/* ── Language bar ───────────────────────────────────────────────────────── */
+.lang-bar {
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-shrink: 0;
-    transition: color 0.15s, background 0.15s;
+    gap: 0;
+    background: var(--card-bg);
+    border-radius: 14px 14px 0 0;
+    border: 1px solid var(--border);
+    border-bottom: none;
+    padding: 0;
+    overflow: hidden;
 }
 
-.translation-swap:hover {
-    color: var(--text);
+.lang-bar__select-wrap {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 20px;
+    position: relative;
+}
+
+.lang-bar__select-wrap::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 25%;
+    height: 50%;
+    width: 1px;
     background: var(--border);
 }
 
-/* ---- Panel Body ---- */
-.translation-panel__body {
-    display: flex;
-    flex-direction: column;
-}
+.lang-bar__select-wrap:last-child::after { display: none; }
 
-.translation-panel__body textarea {
-    width: 100%;
-    resize: none;
-    min-height: 240px;
+.lang-bar select {
+    appearance: none;
+    -webkit-appearance: none;
     border: none;
     background: transparent;
     color: var(--text);
-    padding: 16px;
-    box-sizing: border-box;
-    font-size: 0.95rem;
-    font-family: inherit;
-    line-height: 1.6;
-}
-
-.translation-panel__body textarea:focus {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 4px 28px 4px 4px;
     outline: none;
+    width: 100%;
+    text-align: center;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 4px center;
 }
 
-.translation-panel__body textarea::placeholder {
+.lang-bar select:focus { outline: none; }
+
+/* Swap button in the middle */
+.lang-bar__swap {
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    background: var(--bg);
+    color: var(--muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s, color 0.15s, border-color 0.15s, transform 0.2s;
+    margin: 0 8px;
+}
+
+.lang-bar__swap:hover {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: #fff;
+    transform: rotate(180deg);
+}
+
+/* ── Panels container ───────────────────────────────────────────────────── */
+.translation-panels {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    flex: 1;
+    border: 1px solid var(--border);
+    border-radius: 0 0 14px 14px;
+    overflow: hidden;
+    background: var(--card-bg);
+    box-shadow: 0 4px 24px rgba(15,23,42,0.07);
+}
+
+/* ── Individual panel ───────────────────────────────────────────────────── */
+.translation-panel {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    position: relative;
+}
+
+.translation-panel--source {
+    border-right: 1px solid var(--border);
+}
+
+/* Panel label */
+.translation-panel__label {
+    padding: 10px 18px 0;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
     color: var(--muted);
 }
 
-/* Output text display area */
-#output-text {
-    min-height: 240px;
-    padding: 16px;
-    color: var(--text);
-    font-size: 0.95rem;
-    line-height: 1.6;
-    white-space: pre-wrap;
-    word-break: break-word;
+/* Textarea */
+.translation-panel__body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
 }
 
-/* File info row (shown when a file is attached) */
+.translation-panel__body textarea {
+    flex: 1;
+    width: 100%;
+    resize: none;
+    border: none;
+    background: transparent;
+    color: var(--text);
+    padding: 12px 18px 16px;
+    box-sizing: border-box;
+    font-size: 1rem;
+    font-family: inherit;
+    line-height: 1.7;
+    min-height: 280px;
+}
+
+.translation-panel__body textarea:focus { outline: none; }
+.translation-panel__body textarea::placeholder { color: #c4c9d4; }
+
+/* Output area */
+#output-text {
+    flex: 1;
+    padding: 12px 18px 16px;
+    color: var(--text);
+    font-size: 1rem;
+    line-height: 1.7;
+    white-space: pre-wrap;
+    word-break: break-word;
+    min-height: 280px;
+}
+
+/* Output placeholder */
+#output-text:empty::before {
+    content: 'Translation will appear here…';
+    color: #c4c9d4;
+    font-style: italic;
+}
+
+/* File info */
 .translation-panel__file-info {
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 12px 16px;
-    background: var(--bg);
-    border-top: 1px solid var(--border);
+    gap: 10px;
+    padding: 12px 18px;
+    background: #f0f7ff;
+    border-top: 1px solid #bfdbfe;
     font-size: 0.875rem;
-    color: var(--text);
+    color: #1d4ed8;
 }
+
+.translation-panel__file-info svg { flex-shrink: 0; color: #3b82f6; }
 
 #file-name {
     flex: 1;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    font-weight: 500;
 }
 
 #remove-file {
     background: none;
     border: none;
     cursor: pointer;
-    color: var(--muted);
+    color: #93c5fd;
     font-size: 0.8rem;
-    padding: 2px 6px;
-    border-radius: 4px;
-    transition: color 0.15s;
+    padding: 3px 8px;
+    border-radius: 6px;
+    transition: color 0.15s, background 0.15s;
 }
 
-#remove-file:hover {
-    color: var(--accent);
-}
+#remove-file:hover { color: #ef4444; background: #fee2e2; }
 
 /* Download area */
 #output-download {
-    padding: 16px;
+    padding: 16px 18px;
+    background: #f0fdf4;
+    border-top: 1px solid #bbf7d0;
 }
 
-#download-link {
-    color: var(--primary);
-    text-decoration: none;
-    font-size: 0.9rem;
-}
-
-#download-link:hover {
-    text-decoration: underline;
-}
-
-/* ---- Panel Footer ---- */
-.translation-panel__footer {
-    display: flex;
-    flex-direction: row;
+.download-btn {
+    display: inline-flex;
     align-items: center;
     gap: 8px;
-    padding: 10px 16px;
-    border-top: 1px solid var(--border);
+    padding: 10px 18px;
+    background: #10b981;
+    color: #fff;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 600;
+    transition: background 0.15s;
 }
 
-/* ---- Character Counter ---- */
+.download-btn:hover { background: #059669; }
+
+/* ── Panel footer ───────────────────────────────────────────────────────── */
+.translation-panel__footer {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 14px;
+    border-top: 1px solid var(--border);
+    background: var(--card-bg);
+}
+
+/* Character counter */
 #char-counter {
-    font-size: 0.8rem;
+    font-size: 0.78rem;
     color: var(--muted);
     margin-left: auto;
+    font-variant-numeric: tabular-nums;
 }
 
-.counter-warning {
-    color: var(--accent);
-}
+.counter-warning { color: #f59e0b; font-weight: 600; }
 
-/* ---- Inline Error Area ---- */
+/* Inline error */
 .translation-panel__error {
-    padding: 0 16px;
     font-size: 0.8rem;
-    color: var(--accent);
+    color: #ef4444;
     min-height: 0;
+    padding: 0 18px;
 }
 
 .translation-panel__error:not(:empty) {
-    padding: 8px 16px;
+    padding: 8px 18px;
+    background: #fef2f2;
+    border-top: 1px solid #fecaca;
 }
 
-/* ---- Actions Row ---- */
-.translation-actions {
-    display: flex;
-    justify-content: center;
-    margin-top: 16px;
-}
-
-/* ---- Disabled Button State ---- */
-button[aria-disabled="true"] {
-    opacity: 0.5;
-    pointer-events: none;
-}
-
-/* ---- Responsive ---- */
-@media (max-width: 768px) {
-    .translation-layout {
-        flex-direction: column;
-    }
-
-    .translation-panel {
-        min-width: 0;
-        width: 100%;
-    }
-}
-
-/* ---- Speaker Button ---- */
+/* ── Footer buttons ─────────────────────────────────────────────────────── */
 .speak-btn {
     background: none;
     border: none;
     cursor: pointer;
     padding: 6px;
-    border-radius: 6px;
+    border-radius: 7px;
     color: var(--muted);
     display: flex;
     align-items: center;
@@ -228,12 +274,126 @@ button[aria-disabled="true"] {
     transition: color 0.15s, background 0.15s;
 }
 
-.speak-btn:hover {
-    color: var(--primary);
-    background: var(--border);
+.speak-btn:hover { color: var(--primary); background: #eff6ff; }
+.speak-btn svg   { width: 17px; height: 17px; }
+
+.attach-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border: 1.5px solid var(--border);
+    border-radius: 7px;
+    background: var(--card-bg);
+    color: var(--muted);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: border-color 0.15s, color 0.15s, background 0.15s;
 }
 
-.speak-btn svg {
-    width: 18px;
-    height: 18px;
+.attach-btn:hover { border-color: var(--primary); color: var(--primary); background: #eff6ff; }
+
+.action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 7px;
+    background: var(--card-bg);
+    color: var(--muted);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: border-color 0.15s, color 0.15s, background 0.15s;
+}
+
+.action-btn:hover { border-color: var(--primary); color: var(--primary); background: #eff6ff; }
+
+button[aria-disabled="true"] { opacity: 0.4; pointer-events: none; }
+
+/* PDF column mode select */
+#pdf-column-mode {
+    padding: 5px 8px;
+    border: 1.5px solid var(--border);
+    border-radius: 7px;
+    background: var(--card-bg);
+    color: var(--text);
+    font-size: 0.8rem;
+    cursor: pointer;
+}
+
+/* ── Translate button bar ───────────────────────────────────────────────── */
+.translation-submit {
+    display: flex;
+    justify-content: center;
+    padding: 16px 0 0;
+}
+
+#translate-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 13px 40px;
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s, box-shadow 0.15s, transform 0.1s;
+    box-shadow: 0 4px 14px rgba(59,130,246,0.35);
+    letter-spacing: 0.01em;
+}
+
+#translate-btn:hover {
+    background: #2563eb;
+    box-shadow: 0 6px 20px rgba(59,130,246,0.45);
+    transform: translateY(-1px);
+}
+
+#translate-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Loading spinner inside button */
+.btn-spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255,255,255,0.4);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    flex-shrink: 0;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── Responsive ─────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+    .translation-page { height: auto; }
+
+    .lang-bar { border-radius: 12px 12px 0 0; }
+
+    .translation-panels {
+        grid-template-columns: 1fr;
+        border-radius: 0 0 12px 12px;
+    }
+
+    .translation-panel--source { border-right: none; border-bottom: 1px solid var(--border); }
+
+    .translation-panel__body textarea,
+    #output-text { min-height: 200px; }
+
+    #translate-btn { width: 100%; justify-content: center; }
+}
+
+@media (max-width: 480px) {
+    .lang-bar__select-wrap { padding: 12px 10px; }
+    .translation-panel__footer { flex-wrap: wrap; gap: 6px; }
+    #char-counter { margin-left: 0; }
 }

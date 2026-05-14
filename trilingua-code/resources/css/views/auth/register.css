@@ -1,5 +1,42 @@
 /* Register view-specific stylesheet */
 
+/* Password strength meter */
+.password-strength {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 6px;
+}
+
+.password-strength__bar {
+    flex: 1;
+    height: 5px;
+    background: var(--border);
+    border-radius: 99px;
+    overflow: hidden;
+}
+
+.password-strength__fill {
+    height: 100%;
+    width: 0;
+    border-radius: 99px;
+    transition: width 0.3s ease, background 0.3s ease;
+}
+
+.password-strength__label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    min-width: 60px;
+    text-align: right;
+}
+
+/* Password hint */
+.field-hint {
+    font-size: 0.78rem;
+    color: var(--muted);
+    margin-top: 2px;
+}
+
 /* Auth form */
 .auth-form{display:flex;flex-direction:column;gap:16px}
 

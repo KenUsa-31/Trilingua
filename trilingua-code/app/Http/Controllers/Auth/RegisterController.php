@@ -90,6 +90,6 @@ class RegisterController extends Controller
             'ip' => $request->ip(),
         ]);
 
-        return redirect()->route('dashboard');
+        return redirect()->route('dashboard')->with('login_success', true);
     }
 }

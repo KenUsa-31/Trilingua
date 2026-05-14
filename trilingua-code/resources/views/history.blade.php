@@ -200,6 +200,7 @@
                     try { data = JSON.parse(raw); } catch (e) {}
                     if (response.ok && data && data.download_url) {
                         window.location.href = data.download_url;
+                        if (window.showToast) showToast('success', 'Download started', 'Your file is downloading.');
                     } else {
                         showError((data && data.error) || 'Unable to generate download link. Please try again later.');
                     }
@@ -215,7 +216,11 @@
         btn.addEventListener('click', function () {
             var text = btn.getAttribute('data-text');
             if (navigator.clipboard && text) {
-                navigator.clipboard.writeText(text).catch(function () {});
+                navigator.clipboard.writeText(text).then(function () {
+                    if (window.showToast) showToast('success', 'Copied!', 'Translation copied to clipboard.');
+                }).catch(function () {
+                    if (window.showToast) showToast('error', 'Copy failed', 'Could not copy to clipboard.');
+                });
             }
         });
     });
@@ -228,10 +233,9 @@
             var blob     = new Blob([text], { type: 'text/plain' });
             var url      = URL.createObjectURL(blob);
             var a        = document.createElement('a');
-            a.href       = url;
-            a.download   = filename;
-            a.click();
+            a.href = url; a.download = filename; a.click();
             URL.revokeObjectURL(url);
+            if (window.showToast) showToast('success', 'File saved', filename + ' downloaded.');
         });
     });
 
@@ -239,7 +243,9 @@
     document.querySelectorAll('.share-btn').forEach(function (btn) {
         btn.addEventListener('click', function () {
             if (navigator.clipboard) {
-                navigator.clipboard.writeText(window.location.href).catch(function () {});
+                navigator.clipboard.writeText(window.location.href).then(function () {
+                    if (window.showToast) showToast('info', 'Link copied', 'Page URL copied to clipboard.');
+                }).catch(function () {});
             }
         });
     });

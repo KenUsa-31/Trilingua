@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use GuzzleHttp\Client;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -11,7 +12,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        // Register Guzzle HTTP client as a singleton so HistoryService
+        // and StorageService can have it injected via the container.
+        $this->app->singleton(Client::class, function () {
+            return new Client([
+                'timeout'         => 30,
+                'connect_timeout' => 10,
+            ]);
+        });
     }
 
     /**

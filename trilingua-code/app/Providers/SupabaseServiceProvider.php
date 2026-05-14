@@ -16,6 +16,11 @@ class SupabaseServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Skip validation during CLI commands like composer install / artisan package:discover
+        if ($this->app->runningInConsole() && !$this->app->runningUnitTests()) {
+            return;
+        }
+
         $required = [
             'SUPABASE_URL',
             'SUPABASE_ANON_KEY',
@@ -23,10 +28,17 @@ class SupabaseServiceProvider extends ServiceProvider
             'SUPABASE_BUCKET',
         ];
 
+        $missing = [];
         foreach ($required as $var) {
             if (empty(env($var))) {
-                throw new \RuntimeException("Missing required environment variable: {$var}");
+                $missing[] = $var;
             }
+        }
+
+        if (!empty($missing)) {
+            throw new \RuntimeException(
+                'Missing required Supabase environment variables: ' . implode(', ', $missing)
+            );
         }
     }
 

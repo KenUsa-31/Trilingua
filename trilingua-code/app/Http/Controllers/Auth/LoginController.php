@@ -57,7 +57,7 @@ class LoginController extends Controller
                 'last_activity' => now(),
             ]);
 
-            return redirect()->intended(route('dashboard'));
+            return redirect()->intended(route('dashboard'))->with('login_success', true);
         }
 
         // Increment login attempts on failure
