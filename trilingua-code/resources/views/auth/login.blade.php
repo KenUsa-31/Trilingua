@@ -30,7 +30,7 @@
         </div>
 
         <div class="auth-forgot">
-            <a href="#" class="link-underline">Forgot password?</a>
+            <a href="{{ route('password.request') }}" class="link-underline">Forgot password?</a>
         </div>
 
         <button type="submit" class="btn-auth">Sign in</button>

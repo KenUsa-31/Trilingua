@@ -28,6 +28,12 @@ class HistoryService
         $url     = config('services.supabase.url');
         $anonKey = config('services.supabase.anon_key');
 
+        // If Supabase is not configured, use local database
+        if (!$url || $url === 'https://your-project.supabase.co' || !$anonKey || $anonKey === 'your-anon-key') {
+            $this->insertRecordToLocalDb($data);
+            return;
+        }
+
         // Build payload — only include keys that are present
         $payload = array_filter([
             'user_id'               => $data['user_id'] ?? null,
@@ -54,19 +60,39 @@ class HistoryService
                 'json' => $payload,
             ]);
         } catch (ConnectException $e) {
-            throw new RuntimeException(
-                'Supabase DB insert failed: ' . $e->getMessage(),
-                0,
-                $e
-            );
+            // Fallback to local database on connection error
+            $this->insertRecordToLocalDb($data);
+            return;
         }
 
         $statusCode = $response->getStatusCode();
 
         if ($statusCode < 200 || $statusCode >= 300) {
-            $body = (string) $response->getBody();
-            throw new RuntimeException("Supabase DB insert failed: {$body}");
+            // Fallback to local database on error
+            $this->insertRecordToLocalDb($data);
         }
+    }
+
+    /**
+     * Insert record to local database as fallback.
+     *
+     * @param  array  $data
+     * @return void
+     */
+    private function insertRecordToLocalDb(array $data): void
+    {
+        \App\Models\TranslationHistory::create([
+            'user_id'               => $data['user_id'] ?? null,
+            'translation_type'      => $data['translation_type'] ?? 'document',
+            'original_filename'     => $data['original_filename'] ?? null,
+            'translated_filename'   => $data['translated_filename'] ?? null,
+            'source_language'       => $data['source_language'] ?? null,
+            'target_language'       => $data['target_language'] ?? null,
+            'storage_path'          => $data['storage_path'] ?? null,
+            'signed_url_expires_at' => $data['signed_url_expires_at'] ?? null,
+            'source_text'           => $data['source_text'] ?? null,
+            'translated_text'       => $data['translated_text'] ?? null,
+        ]);
     }
 
     /**
@@ -80,6 +106,11 @@ class HistoryService
     {
         $url     = config('services.supabase.url');
         $anonKey = config('services.supabase.anon_key');
+
+        // If Supabase is not configured, use local database
+        if (!$url || $url === 'https://your-project.supabase.co' || !$anonKey || $anonKey === 'your-anon-key') {
+            return $this->getHistoryFromLocalDb($userId);
+        }
 
         try {
             $response = $this->guzzle->get("{$url}/rest/v1/translation_history", [
@@ -96,21 +127,35 @@ class HistoryService
                 ],
             ]);
         } catch (ConnectException $e) {
-            throw new RuntimeException(
-                'Supabase DB query failed: ' . $e->getMessage(),
-                0,
-                $e
-            );
+            // Fallback to local database on connection error
+            return $this->getHistoryFromLocalDb($userId);
         }
 
         $statusCode = $response->getStatusCode();
 
         if ($statusCode < 200 || $statusCode >= 300) {
-            $body = (string) $response->getBody();
-            throw new RuntimeException("Supabase DB query failed: {$body}");
+            // Fallback to local database on error
+            return $this->getHistoryFromLocalDb($userId);
         }
 
         return json_decode((string) $response->getBody(), true) ?? [];
+    }
+
+    /**
+     * Fetch history from local database as fallback.
+     *
+     * @param  int  $userId
+     * @return array<int, array>
+     */
+    private function getHistoryFromLocalDb(int $userId): array
+    {
+        $records = \App\Models\TranslationHistory::where('user_id', $userId)
+            ->orderBy('created_at', 'desc')
+            ->limit(200)
+            ->get()
+            ->toArray();
+
+        return $records;
     }
 
     /**

@@ -1,5 +1,10 @@
 /* Login view-specific stylesheet */
 
+/* Alert messages */
+.alert{padding:14px 16px;border-radius:12px;margin-bottom:16px;font-size:0.875rem}
+.alert-success{background:#d1fae5;color:#065f46;border:1px solid #6ee7b7}
+.alert-error{background:#fee2e2;color:#991b1b;border:1px solid #fca5a5}
+
 /* Auth form */
 .auth-form{display:flex;flex-direction:column;gap:16px}
 
@@ -7,6 +12,7 @@
 .form-field input{padding:14px 16px;border:1px solid var(--border);border-radius:12px;font-size:0.9375rem;transition:border-color 0.2s;background:var(--card-bg)}
 .form-field input::placeholder{color:#9ca3af}
 .form-field input:focus{outline:none;border-color:#9ca3af}
+.form-field .input-disabled{background:#f3f4f6;color:#6b7280;cursor:not-allowed}
 
 /* Forgot password link */
 .auth-forgot{text-align:right;margin-top:-8px}
