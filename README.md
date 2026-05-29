@@ -210,9 +210,7 @@ This is a capstone project, but contributions, issues, and feature requests are 
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-## 📝 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 👥 Authors
 
@@ -231,5 +229,4 @@ For questions or feedback about this capstone project, please open an issue on G
 
 ---
 
-<p align="center">Made with ❤️ for Philippine Languages</p>
-<p align="center">🇵🇭 Capstone Project 2026</p>
+
