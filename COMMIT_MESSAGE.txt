@@ -1,0 +1,53 @@
+docs: Add comprehensive README and capstone project documentation
+
+This commit updates the project documentation to clearly identify TriLingua
+as a capstone project and provides complete setup instructions.
+
+Major Changes:
+- Enhanced README.md with capstone project badge and description
+- Added comprehensive installation and usage instructions
+- Included technology stack details and project structure
+- Added badges for Laravel, Python, and license
+
+New Features Added:
+- Password reset functionality (forgot password flow)
+- Local database fallback for translation history
+- Python model download script
+- Dashboard error handling improvements
+
+New Documentation:
+- GITHUB_DESCRIPTION.md - Repository setup guide
+- PASSWORD_RESET_GUIDE.md - Password reset documentation
+- DASHBOARD_FIX.md - Dashboard troubleshooting guide
+
+Technical Improvements:
+- Added ForgotPasswordController and ResetPasswordController
+- Created ResetPasswordNotification for email templates
+- Added TranslationHistory model for local database
+- Updated HistoryService with local DB fallback
+- Enhanced .gitignore for Python files
+- Updated login CSS with alert styles
+
+Files Modified:
+- README.md - Complete rewrite with capstone focus
+- routes/web.php - Added password reset routes
+- app/Models/User.php - Added password reset notification
+- app/Services/HistoryService.php - Added local DB fallback
+- Model/server.py - Removed offline mode enforcement
+- resources/views/auth/login.blade.php - Updated forgot password link
+- resources/css/views/auth/login.css - Added alert styles
+
+New Files:
+- GITHUB_DESCRIPTION.md
+- PASSWORD_RESET_GUIDE.md
+- DASHBOARD_FIX.md
+- app/Http/Controllers/Auth/ForgotPasswordController.php
+- app/Http/Controllers/Auth/ResetPasswordController.php
+- app/Notifications/ResetPasswordNotification.php
+- app/Models/TranslationHistory.php
+- resources/views/auth/forgot-password.blade.php
+- resources/views/auth/reset-password.blade.php
+- Model/download_model.py
+
+This update makes the repository more professional and clearly identifies
+it as a capstone project for academic purposes.

@@ -14,9 +14,12 @@ Keep it running while the Laravel app is running.
 import sys
 import os
 
-# Use the locally cached model — never contact Hugging Face
-os.environ["TRANSFORMERS_OFFLINE"] = "1"
-os.environ["HF_DATASETS_OFFLINE"]  = "1"
+# Allow downloading the model on first run if not cached
+# Set TRANSFORMERS_OFFLINE=1 environment variable to force offline mode
+if os.environ.get("TRANSFORMERS_OFFLINE") != "1":
+    print("Note: Model will be downloaded from Hugging Face if not already cached (~2.5GB)")
+    print("To force offline mode, set TRANSFORMERS_OFFLINE=1 environment variable")
+    print()
 
 # Ensure the Model directory is on the path so document_translator_v3 can be imported
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
