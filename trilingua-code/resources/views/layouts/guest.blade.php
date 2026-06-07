@@ -13,6 +13,14 @@
 
     {{-- Left branding panel --}}
     <div class="auth-brand">
+        {{-- Animated canvas background --}}
+        <canvas class="auth-brand__canvas" aria-hidden="true"></canvas>
+
+        {{-- Animated gradient mesh blobs --}}
+        <div class="auth-brand__blob auth-brand__blob--1" aria-hidden="true"></div>
+        <div class="auth-brand__blob auth-brand__blob--2" aria-hidden="true"></div>
+        <div class="auth-brand__blob auth-brand__blob--3" aria-hidden="true"></div>
+
         <div class="auth-brand__logo">
             <div class="auth-brand__logo-icon">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -51,5 +59,115 @@
     </div>
 
 </div>
+@yield('scripts')
+<script>
+(function () {
+    var canvas = document.querySelector('.auth-brand__canvas');
+    if (!canvas) return;
+    var ctx = canvas.getContext('2d');
+    var particles = [];
+    var mouse = { x: null, y: null };
+
+    function resize() {
+        canvas.width  = canvas.offsetWidth;
+        canvas.height = canvas.offsetHeight;
+    }
+
+    function Particle() {
+        this.reset();
+    }
+
+    Particle.prototype.reset = function () {
+        this.x  = Math.random() * canvas.width;
+        this.y  = Math.random() * canvas.height;
+        this.r  = Math.random() * 2 + 0.5;
+        this.vx = (Math.random() - 0.5) * 0.4;
+        this.vy = (Math.random() - 0.5) * 0.4;
+        this.alpha = Math.random() * 0.5 + 0.1;
+    };
+
+    Particle.prototype.update = function () {
+        this.x += this.vx;
+        this.y += this.vy;
+        if (this.x < 0 || this.x > canvas.width)  this.vx *= -1;
+        if (this.y < 0 || this.y > canvas.height)  this.vy *= -1;
+    };
+
+    Particle.prototype.draw = function () {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(255,255,255,' + this.alpha + ')';
+        ctx.fill();
+    };
+
+    function init() {
+        resize();
+        var count = Math.floor((canvas.width * canvas.height) / 8000);
+        count = Math.min(Math.max(count, 20), 80);
+        particles = [];
+        for (var i = 0; i < count; i++) {
+            particles.push(new Particle());
+        }
+    }
+
+    function drawConnections() {
+        for (var i = 0; i < particles.length; i++) {
+            for (var j = i + 1; j < particles.length; j++) {
+                var dx   = particles[i].x - particles[j].x;
+                var dy   = particles[i].y - particles[j].y;
+                var dist = Math.sqrt(dx * dx + dy * dy);
+                if (dist < 100) {
+                    ctx.beginPath();
+                    ctx.moveTo(particles[i].x, particles[i].y);
+                    ctx.lineTo(particles[j].x, particles[j].y);
+                    ctx.strokeStyle = 'rgba(255,255,255,' + (0.12 * (1 - dist / 100)) + ')';
+                    ctx.lineWidth = 0.5;
+                    ctx.stroke();
+                }
+            }
+            // Connect to mouse
+            if (mouse.x !== null) {
+                var mdx  = particles[i].x - mouse.x;
+                var mdy  = particles[i].y - mouse.y;
+                var mdist = Math.sqrt(mdx * mdx + mdy * mdy);
+                if (mdist < 140) {
+                    ctx.beginPath();
+                    ctx.moveTo(particles[i].x, particles[i].y);
+                    ctx.lineTo(mouse.x, mouse.y);
+                    ctx.strokeStyle = 'rgba(255,255,255,' + (0.22 * (1 - mdist / 140)) + ')';
+                    ctx.lineWidth = 0.6;
+                    ctx.stroke();
+                }
+            }
+        }
+    }
+
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawConnections();
+        for (var i = 0; i < particles.length; i++) {
+            particles[i].update();
+            particles[i].draw();
+        }
+        requestAnimationFrame(animate);
+    }
+
+    canvas.addEventListener('mousemove', function (e) {
+        var rect = canvas.getBoundingClientRect();
+        mouse.x = e.clientX - rect.left;
+        mouse.y = e.clientY - rect.top;
+    });
+    canvas.addEventListener('mouseleave', function () {
+        mouse.x = null; mouse.y = null;
+    });
+
+    window.addEventListener('resize', function () {
+        init();
+    });
+
+    init();
+    animate();
+})();
+</script>
 </body>
 </html>

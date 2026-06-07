@@ -100,7 +100,6 @@
                 Settings
             </a>
         </nav>
-
         {{-- User section at bottom --}}
         <div class="sidebar-user">
             <div class="sidebar-user__avatar" aria-hidden="true">
@@ -245,5 +244,6 @@ window.showToast = function (type, title, message, duration) {
     document.addEventListener('keydown', function(e){ if(e.key==='Escape') close(); });
 })();
 </script>
+@yield('scripts')
 </body>
 </html>

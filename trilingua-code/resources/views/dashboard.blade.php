@@ -181,3 +181,56 @@
 
 </div>
 @endsection
+
+@section('scripts')
+<script>
+    // Real-time dashboard: refresh stats every 30 seconds
+    (function () {
+        var INTERVAL = 30000; // 30 seconds
+        var timer;
+
+        function refreshDashboard() {
+            fetch(window.location.href, {
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            })
+            .then(function (res) { return res.text(); })
+            .then(function (html) {
+                var parser = new DOMParser();
+                var doc = parser.parseFromString(html, 'text/html');
+
+                // Update stat cards
+                document.querySelectorAll('.stat-card__value').forEach(function (el, i) {
+                    var newEl = doc.querySelectorAll('.stat-card__value')[i];
+                    if (newEl && el.textContent !== newEl.textContent) {
+                        el.textContent = newEl.textContent;
+                        el.style.transition = 'color 0.4s';
+                        el.style.color = 'var(--primary)';
+                        setTimeout(function () { el.style.color = ''; }, 800);
+                    }
+                });
+
+                // Update recent translations table body
+                var oldTbody = document.querySelector('.table tbody');
+                var newTbody = doc.querySelector('.table tbody');
+                if (oldTbody && newTbody) {
+                    oldTbody.innerHTML = newTbody.innerHTML;
+                }
+            })
+            .catch(function () { /* silent fail — no broken UI */ });
+        }
+
+        // Start polling
+        timer = setInterval(refreshDashboard, INTERVAL);
+
+        // Stop polling when tab is hidden, resume when visible
+        document.addEventListener('visibilitychange', function () {
+            if (document.hidden) {
+                clearInterval(timer);
+            } else {
+                refreshDashboard();
+                timer = setInterval(refreshDashboard, INTERVAL);
+            }
+        });
+    })();
+</script>
+@endsection

@@ -1,34 +1,33 @@
-/* Login view-specific stylesheet */
-
-/* Auth form */
-.auth-form{display:flex;flex-direction:column;gap:16px}
-
-/* Form fields */
-.form-field input{padding:14px 16px;border:1px solid var(--border);border-radius:12px;font-size:0.9375rem;transition:border-color 0.2s;background:var(--card-bg)}
-.form-field input::placeholder{color:#9ca3af}
-.form-field input:focus{outline:none;border-color:#9ca3af}
-
-/* Forgot password link */
-.auth-forgot{text-align:right;margin-top:-8px}
-.link-underline{color:var(--text);text-decoration:underline;font-size:0.875rem}
-.link-underline:hover{color:var(--muted)}
-
-/* Primary auth button */
-.btn-auth{width:100%;padding:14px 16px;background:#000;color:#fff;border:none;border-radius:12px;font-size:0.9375rem;font-weight:600;cursor:pointer;transition:background 0.2s}
-.btn-auth:hover{background:#1f1f1f}
-
-/* Social buttons */
-.social-buttons{display:flex;gap:12px;justify-content:center}
-.btn-social{width:56px;height:56px;border:1px solid var(--border);border-radius:12px;background:var(--card-bg);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background 0.2s}
-.btn-social:hover{background:#f9fafb}
-.btn-social svg{width:20px;height:20px}
-
-/* Footer */
-.auth-footer{text-align:center;color:var(--text);font-size:0.875rem;margin-top:8px}
-.link-bold{color:var(--text);font-weight:600;text-decoration:none}
-.link-bold:hover{text-decoration:underline}
-
-/* Responsive */
-@media(max-width:480px){
-    /* Responsive styles for login-specific elements can be added here */
+/* Login — password toggle only (everything else in guest.css) */
+.input-password-wrapper {
+    position: relative;
+    display: block;
+}
+.input-password-wrapper input {
+    width: 100%;
+    box-sizing: border-box;
+    padding-right: 3rem;
+}
+.btn-toggle-password {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+    color: #94a3b8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    z-index: 2;
+    transition: color 0.2s, transform 0.2s;
+}
+.btn-toggle-password:hover {
+    color: #374151;
+    transform: translateY(-50%) scale(1.15);
 }

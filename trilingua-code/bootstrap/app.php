@@ -16,7 +16,7 @@ return Application::configure(basePath: dirname(__DIR__))
             \App\Http\Middleware\ValidateSession::class,
             \App\Http\Middleware\SecurityHeaders::class,
         ]);
-        
+
         // Configure rate limiting
         $middleware->throttleApi();
     })

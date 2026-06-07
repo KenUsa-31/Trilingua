@@ -52,8 +52,7 @@ class RegisterController extends Controller
                 Password::min(8)
                     ->mixedCase()
                     ->numbers()
-                    ->symbols()
-                    ->uncompromised(),
+                    ->symbols(),
             ],
         ], [
             'name.regex' => 'The name may only contain letters and spaces.',
